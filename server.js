@@ -1,8 +1,6 @@
-// const cors = require("cors")({ origin: true });
 const express = require("express");
 const cheerio = require("cheerio");
 const axios = require("axios");
-const { replaceWith } = require("cheerio/lib/api/manipulation");
 // Project name, created year, description, link, image
 
 const app = express();
@@ -68,8 +66,8 @@ const getGithubApiData = async (username, projects) => {
 
 const getPinnedProjects = async (
 	username = "blink98",
-	needRepoImage,
-	needGhApiData
+	needRepoImage = false,
+	needGhApiData = true
 ) => {
 	const url = `https://github.com/${username}`;
 
