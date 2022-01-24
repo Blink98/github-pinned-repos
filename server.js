@@ -1,20 +1,10 @@
 const express = require("express");
 const cheerio = require("cheerio");
 const axios = require("axios");
-// Project name, created year, description, link, image
+const capitalize = require("./util/capitalize");
+const stringToBoolean = require("./util/stringToBoolean");
 
 const app = express();
-
-const capitalize = (string) => {
-	return string
-		.split(" ")
-		.map((str) => str.charAt(0).toUpperCase() + str.slice(1))
-		.join(" ");
-};
-
-const stringToBoolean = (string) => {
-	return string === "true" ? true : false;
-};
 
 const getProjectsImages = (projects) => {
 	const requests = projects.map(async (project) => {
