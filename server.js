@@ -22,9 +22,7 @@ const getProjectsImages = (projects) => {
 		const $ = cheerio.load(data);
 		const projectImage = $("meta[property='og:image']").attr("content");
 		return {
-			name: project.name,
-			url: project.url,
-			description: project.description,
+			...project,
 			image: projectImage,
 		};
 	});
@@ -46,10 +44,7 @@ const getGithubApiData = async (username, projects) => {
 
 				if (repoUrl.toLowerCase() === projectUrl.toLowerCase()) {
 					repos.push({
-						name: project.name,
-						url: project.url,
-						description: project.description,
-						image: project.image,
+						...project,
 						createdYear: repo.created_at.slice(0, 4),
 					});
 				}
@@ -122,9 +117,9 @@ const getPinnedProjects = async (
 	}
 };
 
-app.get("/", async (req, res) => {
+app.get("/:username", async (req, res) => {
 	const result = await getPinnedProjects(
-		req.query.username,
+		req.params.username,
 		stringToBoolean(req.query.needrepoimage),
 		stringToBoolean(req.query.needghapidata)
 	);
@@ -132,4 +127,4 @@ app.get("/", async (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`App listening on port ${port}`));
+app.listen(port, () => console.log(`Server listening on port ${port}`));
