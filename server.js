@@ -56,6 +56,13 @@ const getGithubApiData = async (username, projects) => {
 			});
 		});
 
+		if (repos.length === 0) {
+			const msg = `Sorry, but we cannot find any of your pinned repositories in your Github API: https://api.github.com/users/${username}/repos.`;
+
+			projects = [msg, ...projects];
+			return projects;
+		}
+
 		return repos;
 	} catch (error) {
 		console.log(error);
@@ -64,7 +71,7 @@ const getGithubApiData = async (username, projects) => {
 };
 
 const getPinnedProjects = async (
-	username = "blink98",
+	username = "iampavangandhi",
 	needRepoImage = false,
 	needGhApiData = false
 ) => {
@@ -110,7 +117,7 @@ const getPinnedProjects = async (
 
 		return projects;
 	} catch (error) {
-		console.error(error);
+		console.log(error);
 		return error;
 	}
 };
