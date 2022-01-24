@@ -71,7 +71,7 @@ const getGithubApiData = async (username, projects) => {
 };
 
 const getPinnedProjects = async (
-	username = "iampavangandhi",
+	username = "blink98",
 	needRepoImage = false,
 	needGhApiData = false
 ) => {
