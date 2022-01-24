@@ -67,8 +67,10 @@ const getGithubApiData = async (username, projects) => {
 const getPinnedProjects = async (
 	username = "blink98",
 	needRepoImage = false,
-	needGhApiData = true
+	needGhApiData = false
 ) => {
+	if (!username) return [];
+
 	const url = `https://github.com/${username}`;
 
 	try {
