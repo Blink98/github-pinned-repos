@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Github Pinned Repos</title>
+</head>
+
+<body>
+  <h1>Enter your Github Username</h1>
+  <form onsubmit="return false">
+    <input type="text" name="username" id="username" placeholder="Enter your Github Username...">
+    <button type="submit" onclick="getData()">Submit</button>
+  </form>
+</body>
+
+<script>
+  function getData() {
+    const username = document.querySelector("#username").value
+    window.location.href = window.location.href + username
+  }
+</script>
+
+</html>

@@ -111,6 +111,10 @@ const getPinnedProjects = async (
 	}
 };
 
+app.get("/", async (req, res) => {
+	res.sendFile(__dirname + "/index.html");
+});
+
 app.get("/:username", async (req, res) => {
 	const result = await getPinnedProjects(
 		req.params.username,
