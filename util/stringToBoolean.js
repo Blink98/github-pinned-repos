@@ -1,3 +1,5 @@
-module.exports.stringToBoolean = (string) => {
+const stringToBoolean = (string) => {
 	return string === "true" ? true : false;
 };
+
+module.exports = stringToBoolean;
