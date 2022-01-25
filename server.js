@@ -58,7 +58,7 @@ const getGithubApiData = async (username, projects) => {
 const getPinnedProjects = async (
 	username,
 	needRepoImage = false,
-	needGhApiData = false
+	needCreatedAt = false
 ) => {
 	if (!username) return [];
 
@@ -88,14 +88,14 @@ const getPinnedProjects = async (
 			});
 		});
 
-		if (needRepoImage && needGhApiData) {
+		if (needRepoImage && needCreatedAt) {
 			projects = await getProjectsImages(projects);
 			projects = await getGithubApiData(username, projects);
 			return projects;
 		} else if (needRepoImage) {
 			projects = await getProjectsImages(projects);
 			return projects;
-		} else if (needGhApiData) {
+		} else if (needCreatedAt) {
 			projects = await getGithubApiData(username, projects);
 			return projects;
 		}
@@ -119,7 +119,7 @@ app.get("/:username", async (req, res) => {
 	const result = await getPinnedProjects(
 		req.params.username,
 		stringToBoolean(req.query.needrepoimage),
-		stringToBoolean(req.query.needghapidata)
+		stringToBoolean(req.query.needcreatedyear)
 	);
 
 	if (result.status === 404) {
