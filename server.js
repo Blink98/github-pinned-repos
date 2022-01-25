@@ -56,7 +56,7 @@ const getGithubApiData = async (username, projects) => {
 };
 
 const getPinnedProjects = async (
-	username = "blink98",
+	username,
 	needRepoImage = false,
 	needGhApiData = false
 ) => {
@@ -102,7 +102,11 @@ const getPinnedProjects = async (
 
 		return projects;
 	} catch (error) {
-		console.log(error);
+		if (error.response.status === 404)
+			return {
+				status: 404,
+				msg: `No Github profile with this username: https://github.com/${username}`,
+			};
 		return error;
 	}
 };
@@ -113,7 +117,12 @@ app.get("/:username", async (req, res) => {
 		stringToBoolean(req.query.needrepoimage),
 		stringToBoolean(req.query.needghapidata)
 	);
-	res.send(result);
+
+	if (result.status === 404) {
+		res.status(404).send(result);
+	} else {
+		res.send(result);
+	}
 });
 
 const port = process.env.PORT || 3000;
