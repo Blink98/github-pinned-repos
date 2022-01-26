@@ -73,7 +73,7 @@ const getPinnedProjects = async (
 
 		pinnedProjects.each(async (index, element) => {
 			const projectName = $(element)
-				.find("a.mr-2.text-bold")
+				.find("span.repo[title]")
 				.text()
 				.replace(/\n/g, "");
 			const projectUrl = `${url}/${projectName}`;
