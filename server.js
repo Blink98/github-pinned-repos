@@ -6,101 +6,100 @@ const stringToBoolean = require("./util/stringToBoolean");
 
 const app = express();
 
-const getProjectsImages = (projects) => {
-	const requests = projects.map(async (project) => {
-		const { data } = await axios.get(project.url);
+const getRepoImage = (repos) => {
+	const requests = repos.map(async (repo) => {
+		const { data } = await axios.get(repo.url);
 		const $ = cheerio.load(data);
-		const projectImage = $("meta[property='og:image']").attr("content");
+		const repoImage = $("meta[property='og:image']").attr("content");
 		return {
-			...project,
-			image: projectImage,
+			...repo,
+			image: repoImage,
 		};
 	});
 
 	return Promise.all(requests);
 };
 
-const getGithubApiData = async (username, projects) => {
+const getGithubApiData = async (username, repos) => {
 	const githubApiUrl = `https://api.github.com/users/${username}/repos`;
 
 	try {
-		const { data } = await axios.get(githubApiUrl);
-		let repos = [];
+		const { data: ghApiRepos } = await axios.get(githubApiUrl);
+		let finalRepos = [];
 
-		data.forEach((repo) => {
-			projects.forEach((project) => {
-				const repoUrl = repo.html_url;
-				const projectUrl = project.url;
+		ghApiRepos.forEach((ghApiRepo) => {
+			repos.forEach((repo) => {
+				const ghApiRepoUrl = ghApiRepo.html_url;
+				const repoUrl = repo.url;
 
-				if (repoUrl.toLowerCase() === projectUrl.toLowerCase()) {
-					repos.push({
-						...project,
-						createdYear: repo.created_at.slice(0, 4),
+				if (ghApiRepoUrl.toLowerCase() === repoUrl.toLowerCase()) {
+					finalRepos.push({
+						...repo,
+						ghApiData: ghApiRepo,
 					});
 				}
 			});
 		});
 
-		if (repos.length === 0) {
+    if (finalRepos.length === 0) {
 			const msg = `Sorry, but we cannot find any of your pinned repositories in your Github API: https://api.github.com/users/${username}/repos.`;
 
-			projects = [msg, ...projects];
-			return projects;
+			repos = [msg, ...repos];
+			return repos;
 		}
 
-		return repos;
+		return finalRepos;
 	} catch (error) {
 		console.log(error);
 		return error;
 	}
 };
 
-const getPinnedProjects = async (
-	username,
-	needRepoImage = false,
-	needCreatedAt = false
-) => {
+const getPinnedRepos = async (username, needRepoImage=false, needGhApiData=false) => {
 	if (!username) return [];
-
-	const url = `https://github.com/${username}`;
-
 	try {
+		const url = `https://github.com/${username}`;
 		const { data } = await axios.get(url);
 		const $ = cheerio.load(data);
-		const pinnedProjects = $(".pinned-item-list-item-content");
+		const pinnedRepos = $(".pinned-item-list-item-content");
+		let repos = [];
 
-		let projects = [];
-
-		pinnedProjects.each(async (index, element) => {
-			const projectName = $(element)
+		pinnedRepos.each((index, element) => {
+			const repoName = $(element)
 				.find("span.repo[title]")
 				.text()
 				.replace(/\n/g, "");
-			const projectUrl = `${url}/${projectName}`;
 
-			projects.push({
-				name: capitalize(projectName.replace(/-/g, " ")),
-				url: projectUrl,
-				description: $(element)
-					.find("p.pinned-item-desc")
-					.text()
-					.replace(/\s\s+/g, ""),
+			const repoUrl = `${url}/${repoName}`;
+
+			const repoDescription = $(element)
+				.find("p.pinned-item-desc")
+				.text()
+				.replace(/\s\s+/g, "");
+
+			repos.push({
+				name: capitalize(repoName.replace(/-/g, " ")),
+				url: repoUrl,
+				description: repoDescription,
 			});
 		});
 
-		if (needRepoImage && needCreatedAt) {
-			projects = await getProjectsImages(projects);
-			projects = await getGithubApiData(username, projects);
-			return projects;
+		if (needRepoImage && needGhApiData) {
+			// If user wants the social preview and GitHub API data
+			repos = await getRepoImage(repos);
+			repos = await getGithubApiData(username, repos);
+			return repos;
 		} else if (needRepoImage) {
-			projects = await getProjectsImages(projects);
-			return projects;
-		} else if (needCreatedAt) {
-			projects = await getGithubApiData(username, projects);
-			return projects;
+			// If user only wants the social preview
+			repos = await getRepoImage(repos);
+			return repos;
+		} else if (needGhApiData) {
+			// If only wants GitHub API data
+			repos = await getGithubApiData(username, repos);
+			return repos;
 		}
 
-		return projects;
+		return repos;
 	} catch (error) {
 		if (error.response.status === 404)
 			return {
@@ -116,10 +115,10 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/:username", async (req, res) => {
-	const result = await getPinnedProjects(
+	const result = await getPinnedRepos(
 		req.params.username,
-		stringToBoolean(req.query.needrepoimage),
-		stringToBoolean(req.query.needcreatedyear)
+		stringToBoolean(req.query.needRepoImage),
+		stringToBoolean(req.query.needGhApiData)
 	);
 
 	if (result.status === 404) {
