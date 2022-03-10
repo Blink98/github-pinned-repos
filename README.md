@@ -19,9 +19,9 @@ https://gh-pinned-repos.herokuapp.com/blink98?needRepoImage=true&needGhApiData=t
 
 **Template-** :feature_emoji: [FEATURE CATEGORY] commit message
 
-:star: [FEAT]  
-:unamused: [CHORES]  
-:hammer_and_wrench: [UPDATE]  
-:rainbow: [STYLE]  
-:memo: [DOCS]  
-:recycle: [REFACTOR]  
+:star: `:star: [FEAT]`  
+:unamused: `:unamused: [CHORES]`  
+:hammer_and_wrench: `:hammer_and_wrench: [UPDATE]`  
+:rainbow: `:rainbow: [STYLE]`  
+:memo: `:memo: [DOCS]`  
+:recycle: `:recycle: [REFACTOR]`  
