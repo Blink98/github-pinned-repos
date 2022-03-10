@@ -14,3 +14,13 @@ https://gh-pinned-repos.herokuapp.com/blink98?needRepoImage=true&needGhApiData=t
 3. **needGhApiData** is a _query parameter_ that takes either **true** or **false** and returns the official GitHub data of all the pinned repos (using official GitHub API: https://github.com/[username]/github-pinned-repos).
 
 > You can find in detail tutorial of this app [here](https://singhlify.hashnode.dev/series/nodejs-api-on-cloud).
+
+# Commit Guidelines
+:feature_emoji: [FEATURE CATEGORY] commit message
+
+:star: [FEAT]
+:unamused: [CHORES]
+:hammer_and_wrench: [UPDATE]
+:rainbow: [STYLE]
+:memo: [DOCS]
+:recycle: [REFACTOR]
