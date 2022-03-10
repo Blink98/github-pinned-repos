@@ -16,11 +16,12 @@ https://gh-pinned-repos.herokuapp.com/blink98?needRepoImage=true&needGhApiData=t
 > You can find in detail tutorial of this app [here](https://singhlify.hashnode.dev/series/nodejs-api-on-cloud).
 
 # Commit Guidelines
-:feature_emoji: [FEATURE CATEGORY] commit message
 
-:star: [FEAT]
-:unamused: [CHORES]
-:hammer_and_wrench: [UPDATE]
-:rainbow: [STYLE]
-:memo: [DOCS]
-:recycle: [REFACTOR]
+**Template-** :feature_emoji: [FEATURE CATEGORY] commit message
+
+:star: [FEAT]  
+:unamused: [CHORES]  
+:hammer_and_wrench: [UPDATE]  
+:rainbow: [STYLE]  
+:memo: [DOCS]  
+:recycle: [REFACTOR]  
